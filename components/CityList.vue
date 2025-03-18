@@ -27,6 +27,33 @@ function removeCity(city: any) {
 }
 </script>
 
-<style>
+<style lang="sass">
+.section-title
+  font-size: 24px
+  line-height: 180%
+  font-weight: bold
+  
+.cities-section
+  margin-bottom: 32px
 
+.stored-cities-container
+  display: flex
+  gap: 8px
+  flex-wrap: wrap
+
+  .stored-cities-card
+    background: red
+    padding: 8px 16px
+    background: #0004
+    border-radius: 4px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 16px
+    
+    span
+      cursor: pointer
+
+    .iconify
+      font-size: 20px
 </style>

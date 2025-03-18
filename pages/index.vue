@@ -28,6 +28,13 @@ function getLocationUpdate({ weatherData, forecastData }: any) {
   forecast.value = forecastData
 }
 
+function getFilterUpdate({ lat, lon }: any) {
+  filter.value = {
+    lat,
+    lon,
+  }
+}
+
 async function selectPlace(place: any) {
   const { lat, lon } = place.location
 
@@ -36,7 +43,7 @@ async function selectPlace(place: any) {
     lon,
   }
 
-  const weatherData = await $fetch('/api/weather', {
+  const weatherRequest = $fetch('/api/weather', {
     method: 'GET',
     query: {
       lat,
@@ -44,13 +51,15 @@ async function selectPlace(place: any) {
     }
   })
 
-  const forecastData = await $fetch('/api/forecast', {
+  const forecastRequest = $fetch('/api/forecast', {
     method: 'GET',
     query: {
       lat,
       lon,
     }
   })
+
+  const [weatherData, forecastData] = await Promise.all([weatherRequest, forecastRequest])
 
   forecast.value = forecastData
 
@@ -61,7 +70,7 @@ async function selectPlace(place: any) {
 </script>
 <template>
   <div class="app-container">
-    <SearchForm :select-place="selectPlace"  @updated-location="getLocationUpdate" />
+    <SearchForm :select-place="selectPlace" @updated-location="getLocationUpdate" @updatedFilter="getFilterUpdate" />
     <CityList :select-place="selectPlace" />
     <WeatherViewer :forecast="forecast" :main-weather="mainWeather" :filter="filter" />
   </div>
@@ -72,4 +81,27 @@ async function selectPlace(place: any) {
   width: 90%
   max-width: 900px
   margin: 0 auto
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+main
+  margin-bottom: 80px
 </style>

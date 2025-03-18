@@ -163,6 +163,115 @@ function saveCity(city: any) {
 }
 </script>
 
-<style>
+<style lang="sass">
+.weather-place
+  font-size: 24px
+  line-height: 180%
+  font-weight: bold
+  display: flex
+  align-items: center
+  gap: 8px
 
+  .iconify
+    font-weight: 800
+    font-size: 32px
+    background: #e0e0e0
+    transition: .4s
+    cursor: pointer
+
+    &:hover
+      background: #fff
+      transform: scale(1.2)
+
+.weather-date
+  font-size: 14px
+  opacity: 70%
+
+.main-weather-container
+  display: grid
+  grid-template-columns: 1fr 1fr
+
+  .current-temperature
+    font-size: 72px
+    line-height: 130%
+
+  .main-info
+    display: flex
+    text-align: center
+    text-transform: capitalize
+    align-items: center
+    justify-content: center
+
+    &::after
+      position: relative;
+      display: block;
+      content: ''
+      width: .1px
+      height: 90%
+      background: #fff5
+      margin: 0 16px
+
+    .weather-icon
+      flex: 1
+
+  .secondary-info
+    display: flex
+    gap: 32px
+    line-height: 160%
+    align-items: center
+
+    &-item
+      display: flex
+      flex-direction: column
+      gap: 16px
+
+
+.weather-label
+  line-height: 130%
+  opacity: 60%
+  margin: 16px 0
+
+.today-forecast-container
+  display: flex;
+  gap: 8px
+  overflow-x: auto
+
+  .today-forecast-card
+    background: purple
+    background: #0003
+    display: flex
+    flex-direction: column
+    gap: 16px
+    padding: 8px
+    border-radius: 4px
+    text-align: center
+
+.next-days-forecast-container
+  display: flex
+  flex-direction: column
+  gap: 8px
+
+  .next-days-forecast-card
+    background: #0003
+    display: flex
+    text-align: center
+    align-items: center
+    justify-content: space-evenly
+    border-radius: 4px
+    padding: 12px
+
+    p
+      line-height: 150%
+
+.no-more-forecasts
+  margin-left: 24px
+  opacity: 80%
+
+.light-label
+  opacity: 60%
+
+@media screen and (max-width: 600px)
+
+  .light-label
+    font-size: 80%
 </style>

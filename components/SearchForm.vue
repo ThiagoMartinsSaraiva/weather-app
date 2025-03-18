@@ -26,6 +26,7 @@ const props = defineProps<Props>()
 
 const $emit = defineEmits<{
   'updatedLocation': any,
+  'updatedFilter': any,
 }>()
 
 const userCurrentLocation = ref<CurrentUserPositionType>({
@@ -71,7 +72,7 @@ async function getCurrentLocation() {
       lon,
     }
 
-    const weatherData = await $fetch('/api/weather', {
+    const weatherRequest = $fetch('/api/weather', {
       method: 'GET',
       query: {
         lat,
@@ -79,15 +80,18 @@ async function getCurrentLocation() {
       }
     })
 
-    const forecastData = await $fetch('/api/forecast', {
+    const forecastRequest = $fetch('/api/forecast', {
       method: 'GET',
       query: {
         lat,
         lon,
       }
     })
+
+    const [weatherData, forecastData] = await Promise.all([weatherRequest, forecastRequest])
 
     $emit('updatedLocation', { forecastData, weatherData })
+    $emit('updatedFilter', { lat, lon })
 
   } catch (e) {
     console.log(e)
@@ -138,149 +142,7 @@ async function getCurrentLocation() {
     font-size: 24px
     color: #333
 
-.weather-place
-  font-size: 24px
-  line-height: 180%
-  font-weight: bold
-  display: flex
-  align-items: center
-  gap: 8px
-
-  .iconify
-    font-weight: 800
-    font-size: 32px
-    background: #e0e0e0
-    transition: .4s
-    cursor: pointer
-
-    &:hover
-      background: #fff
-      transform: scale(1.2)
-
-.section-title
-  font-size: 24px
-  line-height: 180%
-  font-weight: bold
-
-.weather-date
-  font-size: 14px
-  opacity: 70%
-
-.main-weather-container
-  display: grid
-  grid-template-columns: 1fr 1fr
-
-  .current-temperature
-    font-size: 72px
-    line-height: 130%
-
-  .main-info
-    display: flex
-    text-align: center
-    text-transform: capitalize
-    align-items: center
-    justify-content: center
-
-    &::after
-      position: relative;
-      display: block;
-      content: ''
-      width: .1px
-      height: 90%
-      background: #fff5
-      margin: 0 16px
-
-    .weather-icon
-      flex: 1
-
-  .secondary-info
-    display: flex
-    gap: 32px
-    line-height: 160%
-    align-items: center
-
-    &-item
-      display: flex
-      flex-direction: column
-      gap: 16px
-
-.weather-label
-  line-height: 130%
-  opacity: 60%
-  margin: 16px 0
-
-
-.today-forecast-container
-  display: flex;
-  gap: 8px
-  overflow-x: auto
-
-  .today-forecast-card
-    background: purple
-    background: #0003
-    display: flex
-    flex-direction: column
-    gap: 16px
-    padding: 8px
-    border-radius: 4px
-    text-align: center
-
-.next-days-forecast-container
-  display: flex
-  flex-direction: column
-  gap: 8px
-
-  .next-days-forecast-card
-    background: #0003
-    display: flex
-    text-align: center
-    align-items: center
-    justify-content: space-evenly
-    border-radius: 4px
-    padding: 12px
-
-    p
-      line-height: 150%
-
-.light-label
-  opacity: 60%
-
-.no-more-forecasts
-  margin-left: 24px
-  opacity: 80%
-
 @media screen and (max-width: 600px)
   .search-field-container
     margin: 40px auto 0
-
-  .light-label
-    font-size: 80%
-
-
-.cities-section
-  margin-bottom: 32px
-
-.stored-cities-container
-  display: flex
-  gap: 8px
-  flex-wrap: wrap
-
-  .stored-cities-card
-    background: red
-    padding: 8px 16px
-    background: #0004
-    border-radius: 4px
-    display: flex
-    align-items: center
-    justify-content: space-between
-    gap: 16px
-    
-    span
-      cursor: pointer
-
-    .iconify
-      font-size: 20px
-
-main
-  margin-bottom: 80px
 </style>
