@@ -7,6 +7,12 @@ export default defineNuxtConfig({
     '@nuxt/fonts',
     '@nuxt/icon',
     '@nuxt/eslint',
-    '@nuxt/test-utils'
-  ]
+    '@nuxt/test-utils',
+    '@pinia/nuxt',
+  ],
+  runtimeConfig: {
+    apiKey: process.env.API_KEY,
+    apiUrl: process.env.API_URL,
+  },
+  css: ['~/assets/styles/main.sass']
 })
