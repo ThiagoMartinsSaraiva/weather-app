@@ -82,26 +82,6 @@ async function selectPlace(place: any) {
   max-width: 900px
   margin: 0 auto
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 main
   margin-bottom: 80px
 </style>
