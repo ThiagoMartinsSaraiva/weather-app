@@ -52,7 +52,7 @@
         <p class="weather-label">Today's weather</p>
         <div v-if="forecast.day1" class="today-forecast-container">
           <div class="today-forecast-card" v-for="currentForecast in forecast.todayForecast">
-            <p>{{ currentForecast.time }}</p>
+            <p>{{ formatTodayForecastTime(currentForecast.time) }}</p>
             <p><img :src="`https:\\/\\/openweathermap.org/img\\/wn\\/${currentForecast.icon}.png`" alt="current-weather-icon"></p>
             <p>{{ currentForecast.temperature }}°</p>
           </div>
@@ -135,6 +135,22 @@ const monthMapper = {
 function displayNext3DaysDate(date: string) {
   const [_, month, day] = date.split('-')
   return `${day}/${month}`
+}
+
+function formatTodayForecastTime(time: string) {
+  const [hours, minutes] = time.split(':')
+
+  let newHour = Number(hours)
+
+  if (newHour > 12) {
+    newHour -= 12
+  }
+
+  const meridian = Number(hours) >= 12 ? 'pm' : 'am'
+
+  const finalFormat = `${newHour}:${minutes}${meridian}`
+
+  return finalFormat
 }
 
 function displayMainWeatherDate(day: string, date: string) {
