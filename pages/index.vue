@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useCityStore } from '../stores/useCityStore';
+import { useCityStore } from '../stores/useCityStore'
 
 const cityStore = useCityStore()
 
@@ -21,7 +21,7 @@ onMounted(() => {
   localStoragedCities?.forEach((localStoragedCity: any) => {
     cityStore.storeCity(localStoragedCity)
   })
-}) 
+})
 
 function getLocationUpdate({ weatherData, forecastData }: any) {
   mainWeather.value = weatherData
@@ -48,7 +48,7 @@ async function selectPlace(place: any) {
     query: {
       lat,
       lon,
-    }
+    },
   })
 
   const forecastRequest = $fetch('/api/forecast', {
@@ -56,23 +56,32 @@ async function selectPlace(place: any) {
     query: {
       lat,
       lon,
-    }
+    },
   })
 
-  const [weatherData, forecastData] = await Promise.all([weatherRequest, forecastRequest])
+  const [weatherData, forecastData] = await Promise.all([
+    weatherRequest,
+    forecastRequest,
+  ])
 
   forecast.value = forecastData
 
   mainWeather.value = weatherData
 }
-
-
 </script>
 <template>
   <div class="app-container">
-    <SearchForm :select-place="selectPlace" @updated-location="getLocationUpdate" @updatedFilter="getFilterUpdate" />
+    <SearchForm
+      :select-place="selectPlace"
+      @updated-location="getLocationUpdate"
+      @updatedFilter="getFilterUpdate"
+    />
     <CityList :select-place="selectPlace" />
-    <WeatherViewer :forecast="forecast" :main-weather="mainWeather" :filter="filter" />
+    <WeatherViewer
+      :forecast="forecast"
+      :main-weather="mainWeather"
+      :filter="filter"
+    />
   </div>
 </template>
 

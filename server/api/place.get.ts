@@ -3,8 +3,8 @@ export default defineEventHandler(async (event) => {
 
   const { search } = getQuery<{ search?: string }>(event)
 
-  if (!search){
-     return []
+  if (!search) {
+    return []
   }
 
   const placeData = await $fetch<any[]>(`${apiUrl}/geo/1.0/direct`, {
@@ -12,20 +12,22 @@ export default defineEventHandler(async (event) => {
       q: search,
       limit: 5,
       appid: apiKey,
-    }
+    },
   })
 
-  const formattedPlaces = placeData.map(({ name, state, country, lat, lon }) => {
-    const label = `${name}, ${state ? state + ' - ' : '' }${country}`;
+  const formattedPlaces = placeData.map(
+    ({ name, state, country, lat, lon }) => {
+      const label = `${name}, ${state ? state + ' - ' : ''}${country}`
 
-    return {
-      label,
-      location: {
-        lat,
-        lon,
+      return {
+        label,
+        location: {
+          lat,
+          lon,
+        },
       }
-    }
-  })
+    },
+  )
 
   return formattedPlaces
 })

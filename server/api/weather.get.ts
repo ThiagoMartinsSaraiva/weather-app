@@ -1,4 +1,4 @@
-import { format } from "date-fns"
+import { format } from 'date-fns'
 
 type getWeatherDTO = {
   lat: number
@@ -12,7 +12,7 @@ const weekDayMap = {
   3: 'Wed',
   4: 'Thu',
   5: 'Fri',
-  6: 'Sat'
+  6: 'Sat',
 }
 
 export default defineEventHandler(async (event) => {
@@ -29,11 +29,11 @@ export default defineEventHandler(async (event) => {
       appid: apiKey,
       lat,
       lon,
-      units: 'metric'
-    }
+      units: 'metric',
+    },
   })
 
-  const { weather, main, wind, dt, name, sys  } = weatherData
+  const { weather, main, wind, dt, name, sys } = weatherData
 
   const today = new Date(dt * 1000)
 
@@ -55,8 +55,7 @@ export default defineEventHandler(async (event) => {
       main: weather[0].main,
       humidity: main.humidity,
       pressure: main.pressure,
-
-    }
+    },
   }
 
   return formattedWeather

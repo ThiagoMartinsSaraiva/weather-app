@@ -1,15 +1,26 @@
 <template>
   <div>
     <div class="search-container">
-       <div class="search-field-container">
+      <div class="search-field-container">
         <div>
           <Icon name="mdi:search" />
         </div>
-        <input v-model="searchText" @input="handleSearchText" type="text" placeholder="Search for a city...">
-        <button @click="getCurrentLocation"><Icon name="mage:location-fill" /></button>
-       </div>
+        <input
+          v-model="searchText"
+          @input="handleSearchText"
+          type="text"
+          placeholder="Search for a city..."
+        />
+        <button @click="getCurrentLocation">
+          <Icon name="mage:location-fill" />
+        </button>
+      </div>
       <div v-if="searchText && searchedPlaces.length" class="search-list">
-        <div v-for="place in searchedPlaces" class="search-item" @click="(handleSelectPlace(place))">
+        <div
+          v-for="place in searchedPlaces"
+          class="search-item"
+          @click="handleSelectPlace(place)"
+        >
           <p>{{ place.label }}</p>
         </div>
       </div>
@@ -25,8 +36,8 @@ type Props = {
 const props = defineProps<Props>()
 
 const $emit = defineEmits<{
-  'updatedLocation': any,
-  'updatedFilter': any,
+  updatedLocation: any
+  updatedFilter: any
 }>()
 
 const userCurrentLocation = ref<CurrentUserPositionType>({
@@ -40,12 +51,12 @@ const debounceSearchTextTimer = ref<any>(null)
 
 const searchedPlaces = ref<any[]>([])
 
-function handleSearchText(event) {
+function handleSearchText(event: any): void {
   clearTimeout(debounceSearchTextTimer.value)
   debounceSearchTextTimer.value = setTimeout(async () => {
     if (event.target.value) {
       const placesData = await $fetch('/api/place', {
-        method: "GET",
+        method: 'GET',
         query: {
           search: event.target.value,
         },
@@ -53,18 +64,17 @@ function handleSearchText(event) {
 
       searchedPlaces.value = placesData
     }
-  }, 500);
+  }, 500)
 }
 
-function handleSelectPlace(place: any) {
+function handleSelectPlace(place: any): void {
   searchedPlaces.value = []
   props.selectPlace(place)
 }
 
-
 const { getUserCurrentLocation } = useLocation()
 
-async function getCurrentLocation() {
+async function getCurrentLocation(): Promise<void> {
   try {
     const { lat, lon } = await getUserCurrentLocation()
     userCurrentLocation.value = {
@@ -77,7 +87,7 @@ async function getCurrentLocation() {
       query: {
         lat,
         lon,
-      }
+      },
     })
 
     const forecastRequest = $fetch('/api/forecast', {
@@ -85,19 +95,20 @@ async function getCurrentLocation() {
       query: {
         lat,
         lon,
-      }
+      },
     })
 
-    const [weatherData, forecastData] = await Promise.all([weatherRequest, forecastRequest])
+    const [weatherData, forecastData] = await Promise.all([
+      weatherRequest,
+      forecastRequest,
+    ])
 
     $emit('updatedLocation', { forecastData, weatherData })
     $emit('updatedFilter', { lat, lon })
-
   } catch (e) {
     console.log(e)
   }
 }
-
 </script>
 
 <style lang="sass">
@@ -135,10 +146,10 @@ async function getCurrentLocation() {
     &::placeholder
       font-size: 14px
 
-  button 
+  button
     background: transparent
 
-  .iconify 
+  .iconify
     font-size: 24px
     color: #333
 
