@@ -1,18 +1,10 @@
 import { addDays, format } from 'date-fns'
+import { weekDayMapper } from '~/types/Mappers'
+import { ForecastDayType } from '~/types/Types'
 
 type getForecastDTO = {
   lat: number
   lon: number
-}
-
-const weekDayMap = {
-  0: 'Sun',
-  1: 'Mon',
-  2: 'Tue',
-  3: 'Wed',
-  4: 'Thu',
-  5: 'Fri',
-  6: 'Sat',
 }
 
 function formatDailyForecast(forecasts: any[]) {
@@ -69,7 +61,7 @@ function formatDailyForecast(forecasts: any[]) {
     {
       date,
       icon: forecasts?.[foundForecastIndex - 1]?.weather?.[0]?.icon,
-      day: weekDayMap[new Date(year, month - 1, day).getDay()],
+      day: weekDayMapper[new Date(year, month - 1, day).getDay()],
       temp: {
         min: null,
         max: null,
@@ -101,21 +93,21 @@ function formatForecastList(forecastList: any[]) {
   const simplifiedTodayForecast = day1Forecast.map((forecast) => {
     const [date, time] = forecast.dt_txt.split(' ')
     return {
-      temperature: forecast.main.temp.toFixed(1),
       time,
+      temperature: forecast.main.temp.toFixed(1),
       date,
       description: forecast.weather[0].description,
       icon: forecast.weather[0].icon,
     }
   })
 
-  const reducedDay1: any = formatDailyForecast(day1Forecast)
+  const reducedDay1: ForecastDayType = formatDailyForecast(day1Forecast)
 
-  const reducedDay2: any = formatDailyForecast(day2Forecast)
+  const reducedDay2: ForecastDayType = formatDailyForecast(day2Forecast)
 
-  const reducedDay3: any = formatDailyForecast(day3Forecast)
+  const reducedDay3: ForecastDayType = formatDailyForecast(day3Forecast)
 
-  const reducedDay4: any = formatDailyForecast(day4Forecast)
+  const reducedDay4: ForecastDayType = formatDailyForecast(day4Forecast)
 
   return {
     todayForecast: simplifiedTodayForecast,

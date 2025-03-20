@@ -29,6 +29,8 @@
 </template>
 
 <script lang="ts" setup>
+import type { ForecastType, MainWeatherType, SearchPlaceType } from '~/types/Types';
+
 type Props = {
   selectPlace: Function
 }
@@ -49,13 +51,13 @@ const searchText = ref('')
 
 const debounceSearchTextTimer = ref<any>(null)
 
-const searchedPlaces = ref<any[]>([])
+const searchedPlaces = ref<SearchPlaceType[]>([])
 
 function handleSearchText(event: any): void {
   clearTimeout(debounceSearchTextTimer.value)
   debounceSearchTextTimer.value = setTimeout(async () => {
     if (event.target.value) {
-      const placesData = await $fetch('/api/place', {
+      const placesData = await $fetch<SearchPlaceType[]>('/api/place', {
         method: 'GET',
         query: {
           search: event.target.value,
@@ -67,7 +69,7 @@ function handleSearchText(event: any): void {
   }, 500)
 }
 
-function handleSelectPlace(place: any): void {
+function handleSelectPlace(place: SearchPlaceType): void {
   searchedPlaces.value = []
   props.selectPlace(place)
 }
@@ -82,7 +84,7 @@ async function getCurrentLocation(): Promise<void> {
       lon,
     }
 
-    const weatherRequest = $fetch('/api/weather', {
+    const weatherRequest = $fetch<MainWeatherType>('/api/weather', {
       method: 'GET',
       query: {
         lat,
@@ -90,7 +92,7 @@ async function getCurrentLocation(): Promise<void> {
       },
     })
 
-    const forecastRequest = $fetch('/api/forecast', {
+    const forecastRequest = $fetch<ForecastType>('/api/forecast', {
       method: 'GET',
       query: {
         lat,

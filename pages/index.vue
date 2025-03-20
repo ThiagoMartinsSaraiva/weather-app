@@ -1,13 +1,32 @@
 <script lang="ts" setup>
+import type {
+  ForecastType,
+  GetLocationUpdateType,
+  MainWeatherType,
+} from '~/types/Types'
 import { useCityStore } from '../stores/useCityStore'
 
 const cityStore = useCityStore()
 
-const mainWeather = ref<any>({})
-const forecast = ref<any>({})
+const mainWeather = ref<MainWeatherType>({} as MainWeatherType)
+const forecast = ref<ForecastType>({} as ForecastType)
 const filter = ref<CurrentUserPositionType>({
   lat: 0,
   lon: 0,
+})
+
+const pageTitle = computed(() => {
+  return mainWeather.value?.label || 'Weather App'
+})
+
+useHead({
+  title: pageTitle.value,
+})
+
+watch(pageTitle, () => {
+  useHead({
+    title: pageTitle.value,
+  })
 })
 
 onMounted(() => {
@@ -23,12 +42,15 @@ onMounted(() => {
   })
 })
 
-function getLocationUpdate({ weatherData, forecastData }: any) {
+function getLocationUpdate({
+  weatherData,
+  forecastData,
+}: GetLocationUpdateType) {
   mainWeather.value = weatherData
   forecast.value = forecastData
 }
 
-function getFilterUpdate({ lat, lon }: any) {
+function getFilterUpdate({ lat, lon }: CurrentUserPositionType) {
   filter.value = {
     lat,
     lon,
@@ -43,7 +65,7 @@ async function selectPlace(place: any) {
     lon,
   }
 
-  const weatherRequest = $fetch('/api/weather', {
+  const weatherRequest = $fetch<MainWeatherType>('/api/weather', {
     method: 'GET',
     query: {
       lat,
@@ -51,7 +73,7 @@ async function selectPlace(place: any) {
     },
   })
 
-  const forecastRequest = $fetch('/api/forecast', {
+  const forecastRequest = $fetch<ForecastType>('/api/forecast', {
     method: 'GET',
     query: {
       lat,

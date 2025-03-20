@@ -126,42 +126,19 @@
 </template>
 
 <script lang="ts" setup>
+import { dayMapper, monthMapper } from '~/types/Mappers'
 import { useCityStore } from '../stores/useCityStore'
+import type { ForecastType, MainWeatherType } from '~/types/Types'
 
 const cityStore = useCityStore()
 
 type Props = {
-  forecast: any
-  mainWeather: any
-  filter: any
+  forecast: ForecastType
+  mainWeather: MainWeatherType
+  filter: CurrentUserPositionType
 }
 
 const props = defineProps<Props>()
-
-const dayMapper = {
-  Mon: 'Monday',
-  Tue: 'Tuesday',
-  Wed: 'Wednesday',
-  Thu: 'Thursday',
-  Fri: 'Friday',
-  Sat: 'Saturday',
-  Sun: 'Sunday',
-}
-
-const monthMapper = {
-  '01': 'January',
-  '02': 'February',
-  '03': 'March',
-  '04': 'April',
-  '05': 'May',
-  '06': 'June',
-  '07': 'July',
-  '08': 'August',
-  '09': 'September',
-  '10': 'October',
-  '11': 'November',
-  '12': 'December',
-}
 
 function displayNext3DaysDate(date: string): string {
   const [_, month, day] = date.split('-')
@@ -196,7 +173,7 @@ const fullWidth = computed(() => {
   return window.innerWidth
 })
 
-function saveCity(city: any): void {
+function saveCity(city: string): void {
   if (!props.filter.lat || !props.filter.lon || !city) {
     return
   }

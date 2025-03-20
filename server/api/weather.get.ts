@@ -1,24 +1,11 @@
 import { format } from 'date-fns'
-
-type getWeatherDTO = {
-  lat: number
-  lon: number
-}
-
-const weekDayMap = {
-  0: 'Sun',
-  1: 'Mon',
-  2: 'Tue',
-  3: 'Wed',
-  4: 'Thu',
-  5: 'Fri',
-  6: 'Sat',
-}
+import { CurrentUserPositionType } from '~/composables/useLocation'
+import { weekDayMapper } from '~/types/Mappers'
 
 export default defineEventHandler(async (event) => {
   const { apiKey, apiUrl } = useRuntimeConfig()
 
-  const { lat, lon } = getQuery<getWeatherDTO>(event)
+  const { lat, lon } = getQuery<CurrentUserPositionType>(event)
 
   if (!lat || !lon) {
     return {}
@@ -46,7 +33,7 @@ export default defineEventHandler(async (event) => {
       max: main.temp_max.toFixed(1),
       current: main.temp.toFixed(0),
     },
-    day: weekDayMap[today.getDay()],
+    day: weekDayMapper[today.getDay()],
     date: formattedDate,
     windSpeed: wind.speed,
     weather: {

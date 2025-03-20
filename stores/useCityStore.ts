@@ -1,15 +1,16 @@
 import { defineStore } from 'pinia'
+import type { SearchPlaceType } from '~/types/Types'
 
 export const useCityStore = defineStore('cities', {
   state: () => ({
-    storedCities: [],
+    storedCities: [] as SearchPlaceType[],
   }),
   getters: {
-    getStoredCities: (state: any) => state.storedCities,
+    getStoredCities: (state: any): SearchPlaceType[] => state.storedCities,
   },
   actions: {
-    storeCity(city: any) {
-      const foundCity = this.storedCities.find((cityItem: any) => {
+    storeCity(city: SearchPlaceType) {
+      const foundCity = this.storedCities.find((cityItem: SearchPlaceType) => {
         return (
           cityItem.location.lat == city.location.lat &&
           cityItem.location.lon == city.location.lon
@@ -26,8 +27,8 @@ export const useCityStore = defineStore('cities', {
         JSON.stringify(this.storedCities),
       )
     },
-    removeCity(city: any) {
-      this.storedCities = this.storedCities.filter((cityItem: any) => {
+    removeCity(city: SearchPlaceType) {
+      this.storedCities = this.storedCities.filter((cityItem: SearchPlaceType) => {
         return (
           cityItem.location.lat != city.location.lat &&
           cityItem.location.lon != city.location.lon

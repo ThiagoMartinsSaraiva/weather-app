@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
   })
 
   const formattedPlaces = placeData.map(
-    ({ name, state, country, lat, lon }) => {
+    ({ name, state, country, lat, lon }: any) => {
       const label = `${name}, ${state ? state + ' - ' : ''}${country}`
 
       return {
